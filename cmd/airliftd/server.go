@@ -119,7 +119,7 @@ func main() {
 
 	if *flagRsrcDir != "" {
 		log.Print("using disk filesystem")
-		fs, err := vfs.NewNativeFS(*flagRsrcDir)
+		fs, err := vfs.Native(*flagRsrcDir)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -176,7 +176,8 @@ func main() {
 		}(code)
 	}
 
-	r.StaticHandler("/-", *flagRsrcDir).
+	fs, err := vfs.Native(*flagRsrcDir)
+	r.StaticHandler("/-", fs).
 		Get("/-/login", getLogin).
 		Get("/-/logout", getLogout).
 		Post("/-/login", postLogin).
